@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI提示词大全 - 专业提示词模板库</title>
     <style>
-        /* 全局样式 */
+        /* 保留所有原有样式，无需修改 */
         * {
             margin: 0;
             padding: 0;
@@ -19,7 +19,6 @@
             line-height: 1.6;
         }
 
-        /* 头部样式 */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -45,7 +44,6 @@
             margin-bottom: 20px;
         }
 
-        /* 分类板块样式 */
         .categories {
             padding: 40px 0;
         }
@@ -107,7 +105,6 @@
             margin-bottom: 20px;
         }
 
-        /* 提示词内容区域 */
         .prompt-content {
             display: none;
             background: white;
@@ -174,7 +171,6 @@
             background: #38a169;
         }
 
-        /* 新增：用户提交提示词区域 */
         .submit-section {
             background: white;
             border-radius: 10px;
@@ -232,7 +228,6 @@
             background: #5a67d8;
         }
 
-        /* 新增：用户分享的提示词展示区 */
         .user-prompts {
             margin: 50px 0;
         }
@@ -260,7 +255,7 @@
 
         .user-prompt-category {
             background: #e0e7ff;
-            color: #667eea;
+            color: #666;
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -276,7 +271,6 @@
             word-wrap: break-word;
         }
 
-        /* 新增：点赞按钮样式 */
         .like-container {
             display: flex;
             align-items: center;
@@ -309,7 +303,6 @@
             color: #666;
         }
 
-        /* 提示框样式 */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -329,7 +322,6 @@
             opacity: 1;
         }
 
-        /* 页脚样式 */
         footer {
             background: #2d3748;
             color: white;
@@ -338,7 +330,6 @@
             margin-top: 50px;
         }
 
-        /* 响应式调整 */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -359,11 +350,12 @@
             }
         }
     </style>
-    <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 </head>
 <body>
-    <!-- 头部区域 -->
     <header>
         <div class="container">
             <h1>AI提示词大全</h1>
@@ -371,63 +363,40 @@
         </div>
     </header>
 
-    <!-- 主要内容区域 -->
     <main class="container">
-        <!-- 分类板块 -->
         <section class="categories">
             <h2 class="section-title">选择提示词分类</h2>
             <div class="category-grid">
-                <!-- 运动分类 -->
                 <div class="category-card" onclick="showCategory('sports')">
-                    <div class="category-icon">
-                        <i class="fas fa-running"></i>
-                    </div>
+                    <div class="category-icon"><i class="fas fa-running"></i></div>
                     <h3>运动健身</h3>
                     <p>各类运动计划、健身指导、饮食搭配的AI提示词</p>
                 </div>
-
-                <!-- 生活分类 -->
                 <div class="category-card" onclick="showCategory('life')">
-                    <div class="category-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
+                    <div class="category-icon"><i class="fas fa-home"></i></div>
                     <h3>日常生活</h3>
                     <p>生活技巧、家居整理、旅行规划、美食制作的提示词</p>
                 </div>
-
-                <!-- 工作分类 -->
                 <div class="category-card" onclick="showCategory('work')">
-                    <div class="category-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
+                    <div class="category-icon"><i class="fas fa-briefcase"></i></div>
                     <h3>职场工作</h3>
                     <p>工作总结、PPT制作、邮件撰写、项目规划的提示词</p>
                 </div>
-
-                <!-- 学习分类 -->
                 <div class="category-card" onclick="showCategory('study')">
-                    <div class="category-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
+                    <div class="category-icon"><i class="fas fa-book"></i></div>
                     <h3>学习教育</h3>
                     <p>学习计划、论文写作、知识点总结、考试复习的提示词</p>
                 </div>
-
-                <!-- 新增：图片生成分类 -->
                 <div class="category-card" onclick="showCategory('image')">
-                    <div class="category-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
+                    <div class="category-icon"><i class="fas fa-image"></i></div>
                     <h3>图片生成</h3>
                     <p>AI绘画、商业配图、创意设计、场景生成的提示词</p>
                 </div>
             </div>
 
-            <!-- 运动提示词内容 -->
+            <!-- 运动健身 -->
             <div id="sports" class="prompt-content">
-                <button class="back-btn" onclick="hideContent()">
-                    <i class="fas fa-arrow-left"></i> 返回分类
-                </button>
+                <button class="back-btn" onclick="hideContent()"><i class="fas fa-arrow-left"></i> 返回分类</button>
                 <h3>运动健身AI提示词大全</h3>
                 <div class="prompt-list">
                     <div class="prompt-item">
@@ -448,11 +417,9 @@
                 </div>
             </div>
 
-            <!-- 生活提示词内容 -->
+            <!-- 日常生活 -->
             <div id="life" class="prompt-content">
-                <button class="back-btn" onclick="hideContent()">
-                    <i class="fas fa-arrow-left"></i> 返回分类
-                </button>
+                <button class="back-btn" onclick="hideContent()"><i class="fas fa-arrow-left"></i> 返回分类</button>
                 <h3>日常生活AI提示词大全</h3>
                 <div class="prompt-list">
                     <div class="prompt-item">
@@ -473,11 +440,9 @@
                 </div>
             </div>
 
-            <!-- 工作提示词内容 -->
+            <!-- 职场工作 -->
             <div id="work" class="prompt-content">
-                <button class="back-btn" onclick="hideContent()">
-                    <i class="fas fa-arrow-left"></i> 返回分类
-                </button>
+                <button class="back-btn" onclick="hideContent()"><i class="fas fa-arrow-left"></i> 返回分类</button>
                 <h3>职场工作AI提示词大全</h3>
                 <div class="prompt-list">
                     <div class="prompt-item">
@@ -498,11 +463,9 @@
                 </div>
             </div>
 
-            <!-- 学习提示词内容 -->
+            <!-- 学习教育 -->
             <div id="study" class="prompt-content">
-                <button class="back-btn" onclick="hideContent()">
-                    <i class="fas fa-arrow-left"></i> 返回分类
-                </button>
+                <button class="back-btn" onclick="hideContent()"><i class="fas fa-arrow-left"></i> 返回分类</button>
                 <h3>学习教育AI提示词大全</h3>
                 <div class="prompt-list">
                     <div class="prompt-item">
@@ -523,11 +486,9 @@
                 </div>
             </div>
 
-            <!-- 新增：图片生成提示词内容 -->
+            <!-- 图片生成 -->
             <div id="image" class="prompt-content">
-                <button class="back-btn" onclick="hideContent()">
-                    <i class="fas fa-arrow-left"></i> 返回分类
-                </button>
+                <button class="back-btn" onclick="hideContent()"><i class="fas fa-arrow-left"></i> 返回分类</button>
                 <h3>图片生成AI提示词大全</h3>
                 <div class="prompt-list">
                     <div class="prompt-item">
@@ -554,7 +515,7 @@
             </div>
         </section>
 
-        <!-- 新增：用户提交提示词区域 -->
+        <!-- 提交提示词 -->
         <section class="submit-section">
             <h3 class="submit-title">分享你的优质AI提示词</h3>
             <form id="promptForm">
@@ -570,7 +531,7 @@
                         <option value="life">日常生活</option>
                         <option value="work">职场工作</option>
                         <option value="study">学习教育</option>
-                        <option value="image">图片生成</option> <!-- 新增分类选项 -->
+                        <option value="image">图片生成</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -581,19 +542,17 @@
             </form>
         </section>
 
-        <!-- 新增：用户分享的提示词展示区 -->
+        <!-- 用户分享的提示词 -->
         <section class="user-prompts">
             <h2 class="section-title">用户分享的优质提示词</h2>
             <div id="userPromptsList">
-                <!-- 用户提交的提示词会动态显示在这里 -->
+                <p style="text-align:center; color:#666; padding:20px;">加载中...</p>
             </div>
         </section>
     </main>
 
-    <!-- 提示框 -->
     <div class="toast" id="toast"></div>
 
-    <!-- 页脚区域 -->
     <footer>
         <div class="container">
             <p>© 2025 AI提示词大全 - 所有提示词仅供参考学习使用</p>
@@ -601,47 +560,43 @@
     </footer>
 
     <script>
-        // 显示对应分类的提示词内容
+        // ************************** 关键：替换成你的Firebase配置 **************************
+        const firebaseConfig = {
+            apiKey: "替换成你的apiKey",
+            authDomain: "替换成你的authDomain",
+            projectId: "替换成你的projectId",
+            storageBucket: "替换成你的storageBucket",
+            messagingSenderId: "替换成你的messagingSenderId",
+            appId: "替换成你的appId"
+        };
+
+        // 初始化Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 原有功能：分类切换
         function showCategory(categoryId) {
-            // 隐藏所有分类内容
             const allContents = document.querySelectorAll('.prompt-content');
-            allContents.forEach(content => {
-                content.style.display = 'none';
-            });
-            
-            // 隐藏分类卡片，显示选中的内容
+            allContents.forEach(content => content.style.display = 'none');
             document.querySelector('.category-grid').style.display = 'none';
             document.getElementById(categoryId).style.display = 'block';
-            
-            // 滚动到内容顶部
             document.getElementById(categoryId).scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 隐藏内容，返回分类页面
         function hideContent() {
-            // 隐藏所有分类内容
             const allContents = document.querySelectorAll('.prompt-content');
-            allContents.forEach(content => {
-                content.style.display = 'none';
-            });
-            
-            // 显示分类卡片
+            allContents.forEach(content => content.style.display = 'none');
             document.querySelector('.category-grid').style.display = 'grid';
-            
-            // 滚动到分类标题
             document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 复制提示词功能
+        // 原有功能：复制提示词
         function copyPrompt(button) {
             const promptText = button.parentElement.querySelector('.prompt-text').textContent;
             navigator.clipboard.writeText(promptText).then(() => {
-                // 临时修改按钮文字提示复制成功
                 const originalText = button.textContent;
                 button.textContent = '复制成功！';
                 button.style.background = '#38a169';
-                
-                // 2秒后恢复原文字
                 setTimeout(() => {
                     button.textContent = originalText;
                     button.style.background = '#48bb78';
@@ -651,64 +606,112 @@
             });
         }
 
-        // 新增：显示提示框
+        // 提示框功能
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        // 新增：从本地存储获取用户提示词
-        function getUserPrompts() {
-            const prompts = localStorage.getItem('userPrompts');
-            return prompts ? JSON.parse(prompts) : [];
+        // ************************** 改造核心：从Firebase读取所有提示词 **************************
+        async function getUserPrompts() {
+            try {
+                const querySnapshot = await db.collection('ai_prompts').orderBy('createTime', 'desc').get();
+                const prompts = [];
+                querySnapshot.forEach(doc => {
+                    prompts.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                return prompts;
+            } catch (error) {
+                console.error('读取数据失败：', error);
+                showToast('加载提示词失败，请刷新重试');
+                return [];
+            }
         }
 
-        // 新增：保存用户提示词到本地存储
-        function saveUserPrompt(prompt) {
-            const prompts = getUserPrompts();
-            prompts.push({
-                ...prompt,
-                id: Date.now(), // 用时间戳作为唯一ID
-                likes: 0,
-                likedBy: [] // 记录点赞的用户（这里用本地存储模拟）
-            });
-            localStorage.setItem('userPrompts', JSON.stringify(prompts));
-            renderUserPrompts();
+        // ************************** 改造核心：提交提示词到Firebase **************************
+        async function saveUserPrompt(prompt) {
+            try {
+                await db.collection('ai_prompts').add({
+                    title: prompt.title,
+                    category: prompt.category,
+                    content: prompt.content,
+                    likes: 0,
+                    likedBy: [],
+                    createTime: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('提示词提交成功！');
+                renderUserPrompts(); // 重新渲染列表
+            } catch (error) {
+                console.error('提交数据失败：', error);
+                showToast('提交失败，请重试');
+            }
         }
 
-        // 新增：渲染用户提示词列表
-        function renderUserPrompts() {
-            const prompts = getUserPrompts();
+        // ************************** 改造核心：点赞/取消点赞（操作Firebase） **************************
+        async function toggleLike(promptId) {
+            // 用本地存储记录当前用户的点赞（避免重复点赞）
+            const likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
+            const promptRef = db.collection('ai_prompts').doc(promptId);
+
+            try {
+                const doc = await promptRef.get();
+                if (!doc.exists) return;
+
+                const prompt = doc.data();
+                const isLiked = likedPrompts.includes(promptId);
+
+                if (isLiked) {
+                    // 取消点赞
+                    await promptRef.update({
+                        likes: Math.max(0, prompt.likes - 1)
+                    });
+                    likedPrompts.splice(likedPrompts.indexOf(promptId), 1);
+                    showToast('已取消点赞');
+                } else {
+                    // 点赞
+                    await promptRef.update({
+                        likes: (prompt.likes || 0) + 1
+                    });
+                    likedPrompts.push(promptId);
+                    showToast('点赞成功！');
+                }
+
+                // 保存用户点赞记录到本地
+                localStorage.setItem('likedPrompts', JSON.stringify(likedPrompts));
+                renderUserPrompts(); // 重新渲染列表
+            } catch (error) {
+                console.error('点赞失败：', error);
+                showToast('操作失败，请重试');
+            }
+        }
+
+        // 渲染用户提示词列表
+        async function renderUserPrompts() {
+            const prompts = await getUserPrompts();
             const listContainer = document.getElementById('userPromptsList');
-            
-            // 清空现有内容
-            listContainer.innerHTML = '';
-            
-            // 如果没有提示词，显示提示信息
+            const likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
+
             if (prompts.length === 0) {
                 listContainer.innerHTML = '<p style="text-align:center; color:#666; padding:20px;">暂无用户分享的提示词，快来成为第一个分享者吧！</p>';
                 return;
             }
-            
-            // 渲染每个提示词
+
+            const categoryNames = {
+                sports: '运动健身',
+                life: '日常生活',
+                work: '职场工作',
+                study: '学习教育',
+                image: '图片生成'
+            };
+
+            listContainer.innerHTML = '';
             prompts.forEach(prompt => {
-                // 获取分类名称（新增图片生成分类）
-                const categoryNames = {
-                    sports: '运动健身',
-                    life: '日常生活',
-                    work: '职场工作',
-                    study: '学习教育',
-                    image: '图片生成' // 新增分类名称映射
-                };
-                
-                // 检查当前用户是否点过赞
-                const isLiked = prompt.likedBy.includes('localUser');
-                
+                const isLiked = likedPrompts.includes(prompt.id);
                 const promptItem = document.createElement('div');
                 promptItem.className = 'user-prompt-item';
                 promptItem.innerHTML = `
@@ -718,46 +721,18 @@
                     </div>
                     <div class="user-prompt-text">${prompt.content}</div>
                     <div class="like-container">
-                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${prompt.id})">
+                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${prompt.id}')">
                             <i class="fas fa-heart"></i> ${isLiked ? '已点赞' : '点赞'}
                         </button>
-                        <span class="like-count">${prompt.likes} 个赞</span>
+                        <span class="like-count">${prompt.likes || 0} 个赞</span>
                         <button class="copy-btn" onclick="copyUserPrompt('${prompt.content}')">复制提示词</button>
                     </div>
                 `;
-                
                 listContainer.appendChild(promptItem);
             });
         }
 
-        // 新增：切换点赞状态
-        function toggleLike(promptId) {
-            const prompts = getUserPrompts();
-            const promptIndex = prompts.findIndex(p => p.id === promptId);
-            
-            if (promptIndex === -1) return;
-            
-            const prompt = prompts[promptIndex];
-            const userId = 'localUser'; // 模拟用户ID
-            
-            if (prompt.likedBy.includes(userId)) {
-                // 取消点赞
-                prompt.likes--;
-                prompt.likedBy = prompt.likedBy.filter(id => id !== userId);
-                showToast('已取消点赞');
-            } else {
-                // 点赞
-                prompt.likes++;
-                prompt.likedBy.push(userId);
-                showToast('点赞成功！');
-            }
-            
-            // 保存更新后的数据
-            localStorage.setItem('userPrompts', JSON.stringify(prompts));
-            renderUserPrompts();
-        }
-
-        // 新增：复制用户提交的提示词
+        // 复制用户提交的提示词
         function copyUserPrompt(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast('提示词复制成功！');
@@ -766,35 +741,23 @@
             });
         }
 
-        // 页面加载完成后的初始化
+        // 页面加载初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 确保页面加载时分类卡片显示，内容隐藏
+            // 初始化分类显示
             document.querySelector('.category-grid').style.display = 'grid';
-            const allContents = document.querySelectorAll('.prompt-content');
-            allContents.forEach(content => {
-                content.style.display = 'none';
-            });
+            document.querySelectorAll('.prompt-content').forEach(content => content.style.display = 'none');
             
-            // 渲染用户提交的提示词
+            // 加载用户提示词
             renderUserPrompts();
-            
-            // 监听表单提交事件
+
+            // 监听表单提交
             document.getElementById('promptForm').addEventListener('submit', function(e) {
-                e.preventDefault(); // 阻止默认提交行为
-                
-                // 获取表单数据
+                e.preventDefault();
                 const title = document.getElementById('promptTitle').value;
                 const category = document.getElementById('promptCategory').value;
                 const content = document.getElementById('promptContent').value;
-                
-                // 保存提示词
                 saveUserPrompt({ title, category, content });
-                
-                // 重置表单
                 this.reset();
-                
-                // 显示成功提示
-                showToast('提示词提交成功！');
             });
         });
     </script>
