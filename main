@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI提示词大全 - 专业提示词模板库</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        /* 分类板块样式 */
+        .categories {
+            padding: 40px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: #444;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #667eea;
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .category-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .category-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* 提示词内容区域 */
+        .prompt-content {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #5a67d8;
+        }
+
+        .prompt-item {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9ff;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .prompt-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .prompt-text {
+            background: #f0f2ff;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #38a169;
+        }
+
+        /* 新增：用户提交提示词区域 */
+        .submit-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin: 40px 0;
+        }
+
+        .submit-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #5a67d8;
+        }
+
+        /* 新增：用户分享的提示词展示区 */
+        .user-prompts {
+            margin: 50px 0;
+        }
+
+        .user-prompt-item {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .user-prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-prompt-title {
+            font-size: 1.3rem;
+            color: #2d3748;
+        }
+
+        .user-prompt-category {
+            background: #e0e7ff;
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .user-prompt-text {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* 新增：点赞按钮样式 */
+        .like-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .like-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .like-btn:hover {
+            color: #e53e3e;
+        }
+
+        .like-btn.liked {
+            color: #e53e3e;
+        }
+
+        .like-count {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* 提示框样式 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #38a169;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-prompt-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 头部区域 -->
+    <header>
+        <div class="container">
+            <h1>AI提示词大全</h1>
+            <p class="subtitle">精选高质量AI提示词模板，提升你的AI使用效率</p>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="container">
+        <!-- 分类板块 -->
+        <section class="categories">
+            <h2 class="section-title">选择提示词分类</h2>
+            <div class="category-grid">
+                <!-- 运动分类 -->
+                <div class="category-card" onclick="showCategory('sports')">
+                    <div class="category-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3>运动健身</h3>
+                    <p>各类运动计划、健身指导、饮食搭配的AI提示词</p>
+                </div>
+
+                <!-- 生活分类 -->
+                <div class="category-card" onclick="showCategory('life')">
+                    <div class="category-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>日常生活</h3>
+                    <p>生活技巧、家居整理、旅行规划、美食制作的提示词</p>
+                </div>
+
+                <!-- 工作分类 -->
+                <div class="category-card" onclick="showCategory('work')">
+                    <div class="category-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>职场工作</h3>
+                    <p>工作总结、PPT制作、邮件撰写、项目规划的提示词</p>
+                </div>
+
+                <!-- 学习分类 -->
+                <div class="category-card" onclick="showCategory('study')">
+                    <div class="category-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>学习教育</h3>
+                    <p>学习计划、论文写作、知识点总结、考试复习的提示词</p>
+                </div>
+
+                <!-- 新增：图片生成分类 -->
+                <div class="category-card" onclick="showCategory('image')">
+                    <div class="category-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3>图片生成</h3>
+                    <p>AI绘画、商业配图、创意设计、场景生成的提示词</p>
+                </div>
+            </div>
+
+            <!-- 运动提示词内容 -->
+            <div id="sports" class="prompt-content">
+                <button class="back-btn" onclick="hideContent()">
+                    <i class="fas fa-arrow-left"></i> 返回分类
+                </button>
+                <h3>运动健身AI提示词大全</h3>
+                <div class="prompt-list">
+                    <div class="prompt-item">
+                        <h4>个性化健身计划制定</h4>
+                        <div class="prompt-text">作为一名专业健身教练，根据我的情况（性别：{男/女}，年龄：{年龄}，身高：{身高}cm，体重：{体重}kg，健身目标：{增肌/减脂/塑形/提升体能}，运动基础：{零基础/入门/中级/高级}，每周可运动次数：{次数}），为我制定一份详细的8周健身计划，包括每次训练的具体动作、组数、次数、休息时间，以及饮食建议。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>跑步训练计划</h4>
+                        <div class="prompt-text">我想备战{5公里/10公里/半马/全马}比赛，目前跑步水平是{描述当前水平}，请为我制定一份12周的系统训练计划，包含每周的训练内容、强度、恢复建议，以及比赛前的调整策略。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>居家无器械训练</h4>
+                        <div class="prompt-text">设计一套30分钟的居家无器械全身训练方案，适合上班族，每天可在早晨或晚上进行，重点锻炼核心、上肢和下肢力量，动作要简单易学，每个动作说明具体做法和注意事项。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 生活提示词内容 -->
+            <div id="life" class="prompt-content">
+                <button class="back-btn" onclick="hideContent()">
+                    <i class="fas fa-arrow-left"></i> 返回分类
+                </button>
+                <h3>日常生活AI提示词大全</h3>
+                <div class="prompt-list">
+                    <div class="prompt-item">
+                        <h4>旅行攻略规划</h4>
+                        <div class="prompt-text">为我规划一份{目的地}的{3天/5天/7天}深度旅行攻略，包括必去景点、特色美食、住宿推荐、交通方式、预算分配，以及当地的文化习俗和注意事项，我的旅行偏好是{亲子/情侣/独自/朋友}，预算{高/中/低}。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>家常菜食谱</h4>
+                        <div class="prompt-text">教我制作一道经典的{菜品名称}，详细说明所需食材及用量、烹饪步骤、调味技巧、注意事项，以及如何根据口味调整做法，适合厨房新手操作。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>家居收纳整理</h4>
+                        <div class="prompt-text">为我的{卧室/客厅/厨房/卫生间}设计一套实用的收纳整理方案，面积约{平方米}，家庭成员{人数}，主要收纳需求是{衣物/厨具/杂物/化妆品}，预算{金额}，要求美观又实用。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工作提示词内容 -->
+            <div id="work" class="prompt-content">
+                <button class="back-btn" onclick="hideContent()">
+                    <i class="fas fa-arrow-left"></i> 返回分类
+                </button>
+                <h3>职场工作AI提示词大全</h3>
+                <div class="prompt-list">
+                    <div class="prompt-item">
+                        <h4>工作总结撰写</h4>
+                        <div class="prompt-text">帮我撰写一份{月度/季度/年度}工作总结，我的岗位是{岗位名称}，本阶段主要完成的工作包括{列出主要工作}，取得的成绩是{成绩}，遇到的问题是{问题}，下一步工作计划是{计划}，要求语言专业、逻辑清晰，字数控制在{字数}左右。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>商务邮件撰写</h4>
+                        <div class="prompt-text">帮我写一封给{客户/领导/同事}的商务邮件，主题是{邮件主题}，主要内容是{核心内容}，要求语气{正式/友好/委婉/直接}，语言简洁明了，符合商务沟通规范，同时体现专业性。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>项目方案策划</h4>
+                        <div class="prompt-text">为{项目名称}制定一份详细的项目策划方案，包括项目背景、目标、实施步骤、时间节点、人员分工、预算估算、风险评估及应对措施，项目周期为{时长}，目标受众是{受众}。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 学习提示词内容 -->
+            <div id="study" class="prompt-content">
+                <button class="back-btn" onclick="hideContent()">
+                    <i class="fas fa-arrow-left"></i> 返回分类
+                </button>
+                <h3>学习教育AI提示词大全</h3>
+                <div class="prompt-list">
+                    <div class="prompt-item">
+                        <h4>学习计划制定</h4>
+                        <div class="prompt-text">我要备考{考试名称}，距离考试还有{天数}天，我的基础{好/一般/较差}，每天可学习时间约{小时}小时，请为我制定一份详细的复习计划，包括每日学习内容、重点难点、复习方法、模拟测试安排。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>论文写作指导</h4>
+                        <div class="prompt-text">我的毕业论文题目是{题目}，专业是{专业}，需要你指导我完成论文框架设计，包括摘要、引言、文献综述、研究方法、数据分析、结论等部分的写作要点，以及参考文献格式规范和写作注意事项。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>知识点讲解</h4>
+                        <div class="prompt-text">用通俗易懂的语言讲解{知识点名称}，结合实际案例和生活中的例子，避免使用专业术语，让零基础的人也能理解，同时指出常见的理解误区。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增：图片生成提示词内容 -->
+            <div id="image" class="prompt-content">
+                <button class="back-btn" onclick="hideContent()">
+                    <i class="fas fa-arrow-left"></i> 返回分类
+                </button>
+                <h3>图片生成AI提示词大全</h3>
+                <div class="prompt-list">
+                    <div class="prompt-item">
+                        <h4>写实风格风景图生成</h4>
+                        <div class="prompt-text">生成一张超写实风格的{场景，如：雪山湖泊/海边日落/森林晨雾}图片，8K分辨率，超高细节，自然光效，色彩丰富，景深效果，使用Unreal Engine 5渲染，构图采用{三分法/对称构图}，氛围{宁静/壮丽/治愈}，无水印，无文字，适合用作桌面壁纸。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>商业产品展示图</h4>
+                        <div class="prompt-text">生成一张{产品名称，如：无线蓝牙耳机/复古马克杯/智能手表}的商业展示图，极简风格，纯白色背景，柔和的光影效果，45度俯视角度，产品细节清晰可见，高光反射自然，无阴影噪点，符合电商平台主图规范，分辨率3000×3000。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>二次元角色设计</h4>
+                        <div class="prompt-text">设计一个{风格，如：日系动漫/赛博朋克/古风仙侠}风格的角色，性别{男/女}，年龄{16-25岁}，发型{具体描述}，服饰{详细样式}，配饰{特色饰品}，表情{生动描述}，背景{场景描述}，线条清晰，色彩鲜明，比例协调，无变形，全身立绘，PNG透明背景。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                    <div class="prompt-item">
+                        <h4>创意插画生成</h4>
+                        <div class="prompt-text">生成一幅{主题，如：猫咪在太空遨游/城市中的治愈角落/四季同框}的创意插画，{风格，如：水彩/扁平风/像素画}，色彩搭配{暖色调/莫兰迪色系/高饱和度}，画面充满故事感，细节丰富，无违和元素，适合用作社交媒体配图。</div>
+                        <button class="copy-btn" onclick="copyPrompt(this)">复制提示词</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 新增：用户提交提示词区域 -->
+        <section class="submit-section">
+            <h3 class="submit-title">分享你的优质AI提示词</h3>
+            <form id="promptForm">
+                <div class="form-group">
+                    <label for="promptTitle">提示词标题</label>
+                    <input type="text" id="promptTitle" placeholder="例如：高效写周报的AI提示词" required>
+                </div>
+                <div class="form-group">
+                    <label for="promptCategory">所属分类</label>
+                    <select id="promptCategory" required>
+                        <option value="">请选择分类</option>
+                        <option value="sports">运动健身</option>
+                        <option value="life">日常生活</option>
+                        <option value="work">职场工作</option>
+                        <option value="study">学习教育</option>
+                        <option value="image">图片生成</option> <!-- 新增分类选项 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="promptContent">提示词内容</label>
+                    <textarea id="promptContent" placeholder="请输入你的AI提示词内容..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">提交提示词</button>
+            </form>
+        </section>
+
+        <!-- 新增：用户分享的提示词展示区 -->
+        <section class="user-prompts">
+            <h2 class="section-title">用户分享的优质提示词</h2>
+            <div id="userPromptsList">
+                <!-- 用户提交的提示词会动态显示在这里 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 提示框 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 页脚区域 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 AI提示词大全 - 所有提示词仅供参考学习使用</p>
+        </div>
+    </footer>
+
+    <script>
+        // 显示对应分类的提示词内容
+        function showCategory(categoryId) {
+            // 隐藏所有分类内容
+            const allContents = document.querySelectorAll('.prompt-content');
+            allContents.forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 隐藏分类卡片，显示选中的内容
+            document.querySelector('.category-grid').style.display = 'none';
+            document.getElementById(categoryId).style.display = 'block';
+            
+            // 滚动到内容顶部
+            document.getElementById(categoryId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 隐藏内容，返回分类页面
+        function hideContent() {
+            // 隐藏所有分类内容
+            const allContents = document.querySelectorAll('.prompt-content');
+            allContents.forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 显示分类卡片
+            document.querySelector('.category-grid').style.display = 'grid';
+            
+            // 滚动到分类标题
+            document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 复制提示词功能
+        function copyPrompt(button) {
+            const promptText = button.parentElement.querySelector('.prompt-text').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                // 临时修改按钮文字提示复制成功
+                const originalText = button.textContent;
+                button.textContent = '复制成功！';
+                button.style.background = '#38a169';
+                
+                // 2秒后恢复原文字
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#48bb78';
+                }, 2000);
+            }).catch(err => {
+                alert('复制失败，请手动复制：' + err);
+            });
+        }
+
+        // 新增：显示提示框
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 新增：从本地存储获取用户提示词
+        function getUserPrompts() {
+            const prompts = localStorage.getItem('userPrompts');
+            return prompts ? JSON.parse(prompts) : [];
+        }
+
+        // 新增：保存用户提示词到本地存储
+        function saveUserPrompt(prompt) {
+            const prompts = getUserPrompts();
+            prompts.push({
+                ...prompt,
+                id: Date.now(), // 用时间戳作为唯一ID
+                likes: 0,
+                likedBy: [] // 记录点赞的用户（这里用本地存储模拟）
+            });
+            localStorage.setItem('userPrompts', JSON.stringify(prompts));
+            renderUserPrompts();
+        }
+
+        // 新增：渲染用户提示词列表
+        function renderUserPrompts() {
+            const prompts = getUserPrompts();
+            const listContainer = document.getElementById('userPromptsList');
+            
+            // 清空现有内容
+            listContainer.innerHTML = '';
+            
+            // 如果没有提示词，显示提示信息
+            if (prompts.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; color:#666; padding:20px;">暂无用户分享的提示词，快来成为第一个分享者吧！</p>';
+                return;
+            }
+            
+            // 渲染每个提示词
+            prompts.forEach(prompt => {
+                // 获取分类名称（新增图片生成分类）
+                const categoryNames = {
+                    sports: '运动健身',
+                    life: '日常生活',
+                    work: '职场工作',
+                    study: '学习教育',
+                    image: '图片生成' // 新增分类名称映射
+                };
+                
+                // 检查当前用户是否点过赞
+                const isLiked = prompt.likedBy.includes('localUser');
+                
+                const promptItem = document.createElement('div');
+                promptItem.className = 'user-prompt-item';
+                promptItem.innerHTML = `
+                    <div class="user-prompt-header">
+                        <h3 class="user-prompt-title">${prompt.title}</h3>
+                        <span class="user-prompt-category">${categoryNames[prompt.category]}</span>
+                    </div>
+                    <div class="user-prompt-text">${prompt.content}</div>
+                    <div class="like-container">
+                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${prompt.id})">
+                            <i class="fas fa-heart"></i> ${isLiked ? '已点赞' : '点赞'}
+                        </button>
+                        <span class="like-count">${prompt.likes} 个赞</span>
+                        <button class="copy-btn" onclick="copyUserPrompt('${prompt.content}')">复制提示词</button>
+                    </div>
+                `;
+                
+                listContainer.appendChild(promptItem);
+            });
+        }
+
+        // 新增：切换点赞状态
+        function toggleLike(promptId) {
+            const prompts = getUserPrompts();
+            const promptIndex = prompts.findIndex(p => p.id === promptId);
+            
+            if (promptIndex === -1) return;
+            
+            const prompt = prompts[promptIndex];
+            const userId = 'localUser'; // 模拟用户ID
+            
+            if (prompt.likedBy.includes(userId)) {
+                // 取消点赞
+                prompt.likes--;
+                prompt.likedBy = prompt.likedBy.filter(id => id !== userId);
+                showToast('已取消点赞');
+            } else {
+                // 点赞
+                prompt.likes++;
+                prompt.likedBy.push(userId);
+                showToast('点赞成功！');
+            }
+            
+            // 保存更新后的数据
+            localStorage.setItem('userPrompts', JSON.stringify(prompts));
+            renderUserPrompts();
+        }
+
+        // 新增：复制用户提交的提示词
+        function copyUserPrompt(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('提示词复制成功！');
+            }).catch(err => {
+                alert('复制失败，请手动复制：' + err);
+            });
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保页面加载时分类卡片显示，内容隐藏
+            document.querySelector('.category-grid').style.display = 'grid';
+            const allContents = document.querySelectorAll('.prompt-content');
+            allContents.forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 渲染用户提交的提示词
+            renderUserPrompts();
+            
+            // 监听表单提交事件
+            document.getElementById('promptForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // 阻止默认提交行为
+                
+                // 获取表单数据
+                const title = document.getElementById('promptTitle').value;
+                const category = document.getElementById('promptCategory').value;
+                const content = document.getElementById('promptContent').value;
+                
+                // 保存提示词
+                saveUserPrompt({ title, category, content });
+                
+                // 重置表单
+                this.reset();
+                
+                // 显示成功提示
+                showToast('提示词提交成功！');
+            });
+        });
+    </script>
+</body>
+</html>
