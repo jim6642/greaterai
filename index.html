@@ -330,6 +330,12 @@
             margin-top: 50px;
         }
 
+        .contact-email {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -347,6 +353,10 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
+            }
+            
+            .contact-email {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -541,7 +551,7 @@
             </form>
         </section>
 
-        <!-- 用户分享的提示词 -->
+        <!-- 用户分享的优质提示词 -->
         <section class="user-prompts">
             <h2 class="section-title">用户分享的优质提示词</h2>
             <div id="userPromptsList">
@@ -555,6 +565,7 @@
     <footer>
         <div class="container">
             <p>© 2025 AI提示词大全 - 所有提示词仅供参考学习使用</p>
+            <p class="contact-email">联系邮箱：3352875852@qq.com</p>
         </div>
     </footer>
 
@@ -606,7 +617,7 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        // 从Supabase读取所有提示词（带超时）
+        // 从Supabase读取所有提示词（按点赞数降序排序）
         async function getUserPrompts() {
             // 超时控制：8秒没响应就判定失败
             const timeoutPromise = new Promise((_, reject) => {
@@ -614,11 +625,12 @@
             });
 
             try {
-                // 从ai_prompts表查询，按创建时间倒序
+                // 核心改动：先按likes降序，再按created_at降序
                 const { data, error } = await Promise.race([
                     supabase
                         .from('ai_prompts')
                         .select('*')
+                        .order('likes', { ascending: false })
                         .order('created_at', { ascending: false }),
                     timeoutPromise
                 ]);
