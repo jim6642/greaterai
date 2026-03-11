@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI提示词大全 - 专业提示词模板库</title>
+    <title>AI提示词大全 - Supabase版</title>
     <style>
         /* 保留所有原有样式，无需修改 */
         * {
@@ -350,10 +350,9 @@
             }
         }
     </style>
+    <!-- 引入Supabase JS SDK（静态HTML专用） -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 </head>
 <body>
     <header>
@@ -560,19 +559,12 @@
     </footer>
 
     <script>
-        // ************************** 关键：替换成你的Firebase配置 **************************
-        const firebaseConfig = {
-            apiKey: "AIzaSyC8_eKWiw4StXMxHiB2aY0fhWY1AAjJMGY",
-            authDomain: "greaterai.firebaseapp.com",
-            projectId: "greaterai",
-            storageBucket: "greaterai.firebasestorage.app",
-            messagingSenderId: "367907938569",
-            appId: "1:367907938569:web:7e0db73c256ccbe48433d8"
-        };
+        // ************************** 已填入你的Supabase配置 **************************
+        const SUPABASE_URL = "https://wyndgtugssiimsqcahps.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_OqeSHWhVANFnYpDSY8RzOw_tmXxjtLv";
 
-        // 初始化Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // 初始化Supabase客户端
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // 原有功能：分类切换
         function showCategory(categoryId) {
@@ -614,79 +606,99 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        // ************************** 改造核心：从Firebase读取所有提示词 **************************
+        // 从Supabase读取所有提示词（带超时）
         async function getUserPrompts() {
+            // 超时控制：8秒没响应就判定失败
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('请求超时，请检查网络')), 8000);
+            });
+
             try {
-                const querySnapshot = await db.collection('ai_prompts').orderBy('createTime', 'desc').get();
-                const prompts = [];
-                querySnapshot.forEach(doc => {
-                    prompts.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-                return prompts;
+                // 从ai_prompts表查询，按创建时间倒序
+                const { data, error } = await Promise.race([
+                    supabase
+                        .from('ai_prompts')
+                        .select('*')
+                        .order('created_at', { ascending: false }),
+                    timeoutPromise
+                ]);
+
+                if (error) throw new Error(error.message);
+                return data || [];
             } catch (error) {
-                console.error('读取数据失败：', error);
-                showToast('加载提示词失败，请刷新重试');
+                console.error('读取数据失败：', error.message);
+                document.getElementById('userPromptsList').innerHTML = 
+                    `<p style="text-align:center; color:#e53e3e; padding:20px;">加载失败：${error.message}</p>`;
                 return [];
             }
         }
 
-        // ************************** 改造核心：提交提示词到Firebase **************************
+        // 提交提示词到Supabase
         async function saveUserPrompt(prompt) {
             try {
-                await db.collection('ai_prompts').add({
-                    title: prompt.title,
-                    category: prompt.category,
-                    content: prompt.content,
-                    likes: 0,
-                    likedBy: [],
-                    createTime: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                const { data, error } = await supabase
+                    .from('ai_prompts')
+                    .insert([
+                        {
+                            title: prompt.title,
+                            category: prompt.category,
+                            content: prompt.content,
+                            likes: 0 // 初始点赞数为0
+                        }
+                    ]);
+
+                if (error) throw new Error(error.message);
                 showToast('提示词提交成功！');
                 renderUserPrompts(); // 重新渲染列表
             } catch (error) {
-                console.error('提交数据失败：', error);
-                showToast('提交失败，请重试');
+                console.error('提交数据失败：', error.message);
+                showToast('提交失败：' + error.message);
             }
         }
 
-        // ************************** 改造核心：点赞/取消点赞（操作Firebase） **************************
+        // 点赞/取消点赞
         async function toggleLike(promptId) {
-            // 用本地存储记录当前用户的点赞（避免重复点赞）
+            // 用本地存储记录用户点赞，避免重复点赞
             const likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
-            const promptRef = db.collection('ai_prompts').doc(promptId);
+            const isLiked = likedPrompts.includes(promptId);
 
             try {
-                const doc = await promptRef.get();
-                if (!doc.exists) return;
+                // 先查询当前点赞数
+                const { data: promptData, error: fetchError } = await supabase
+                    .from('ai_prompts')
+                    .select('likes')
+                    .eq('id', promptId)
+                    .single();
 
-                const prompt = doc.data();
-                const isLiked = likedPrompts.includes(promptId);
+                if (fetchError) throw new Error(fetchError.message);
 
+                let newLikes = promptData.likes;
                 if (isLiked) {
-                    // 取消点赞
-                    await promptRef.update({
-                        likes: Math.max(0, prompt.likes - 1)
-                    });
+                    // 取消点赞：点赞数-1（最小为0）
+                    newLikes = Math.max(0, newLikes - 1);
                     likedPrompts.splice(likedPrompts.indexOf(promptId), 1);
                     showToast('已取消点赞');
                 } else {
-                    // 点赞
-                    await promptRef.update({
-                        likes: (prompt.likes || 0) + 1
-                    });
+                    // 点赞：点赞数+1
+                    newLikes += 1;
                     likedPrompts.push(promptId);
                     showToast('点赞成功！');
                 }
 
-                // 保存用户点赞记录到本地
+                // 更新数据库中的点赞数
+                const { error: updateError } = await supabase
+                    .from('ai_prompts')
+                    .update({ likes: newLikes })
+                    .eq('id', promptId);
+
+                if (updateError) throw new Error(updateError.message);
+
+                // 保存点赞记录到本地
                 localStorage.setItem('likedPrompts', JSON.stringify(likedPrompts));
                 renderUserPrompts(); // 重新渲染列表
             } catch (error) {
-                console.error('点赞失败：', error);
-                showToast('操作失败，请重试');
+                console.error('点赞失败：', error.message);
+                showToast('操作失败：' + error.message);
             }
         }
 
